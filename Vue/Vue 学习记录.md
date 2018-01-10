@@ -127,14 +127,62 @@
             <log-form @has-log="onSuccessLog"></log-form>
         </my-dialog>
 
-	同时父组件监听子组件的事件 on-close 当子组件
+	同时父组件监听子组件的事件 on-close 当子组件运行下面函数：
 	       closeMyself () {
                 this.$emit('on-close', "传递给父组件的数据也可以没有")
             }
 	发送事件时，父组件就会接收到，并且作出对应的处理，同时子组件也可以传递数据。
 
 
-### 路由跳转
+
+### slot分发内容
+
+	父组件中的内容
+	 // game 为子组件
+	<game>  
+	   <h1 slot="k1">王者荣耀</h1>  
+	   <h2 slot="k2">王者荣耀</h2>  
+	   <p>小学生要背锅</p>  
+	</game>  
+
+	子组件中的slot有name属性，与父组件的slot的值相对应，那么久会匹配到。没有匹配到的先会显示在默认的slot中。
+	// 子组件内容
+	<template>  
+	   <div>  
+	      <h4>游戏</h4>  
+	      <slot name="k1"></slot>  
+	      <slot name="k2"></slot>  
+	      <slot></slot>  
+	   </div>  
+	</template>  
+
+	结果：
+		游戏
+		王者荣耀
+		王者荣耀
+		小学生要背锅
+	
+
+### $refs vue操作DOM方法
+
+	<div ref="wrapper">
+	    <slot></slot>
+	 </div>
+
+	获取上面的DIV节点： this.$refs.wrapper
+
+
+
+### 路由和路由跳转
+
+- 路由形式
+
+	    <router-link tag="div" class="tab-item" to="/recommend">
+            <span class="tab-link">推荐</span>
+        </router-link>
+
+		路由默认是 a 标签，tag是重新设置路由的标签
+		路由展示： <router-view></router-view>
 
 - 软件自动跳转
 
@@ -154,6 +202,7 @@
 			</router-link>
 		</ul>
 
+	active-class="active" 表示点击到对应的li列表时，加入active这个类似
 
 ### 路由跳转回到页面顶部	
 
@@ -197,13 +246,34 @@
 	};
 
 	调用：
-
+		方法一：
 	created(){
 			// vuex 中传递参数方法
             this.$store.dispatch('getProductOfId',
 	            parseInt(this.$route.params.id));
         },
 
+
+		方法二：
+
+		import {mapMutations} from 'vuex'
+
+		  methods: {
+		
+		      ...mapMutations({
+		        setSinger: 'getProductOfId'
+		      })
+
+			或者不要别名： 
+			...mapMutations({
+		        'getProductOfId'
+		      }),
+
+			其他函数直接调用：
+			created() {
+				getProductOfId(11);
+			}
+		  },
 
 ### You may have an infinite update loop in a component render function
 	
@@ -246,6 +316,71 @@
 - 用webpack模板的vue项目设置方法
 
 	这个网上有，可以参考，因为没用过webpack模板的vue进行跨域开发，所以没有配置过。
+
+
+### vue-lazyload vue中的图片懒加载插件
+
+
+### vue 中的 event的用法
+	
+	函数如果前面有参数的话，event这个参数是放在最后的。
+	/* ... */
+	{ 
+	  methods: { 
+	    submit: function (msg, e) { 
+	      e.stopPropagation() 
+			console.log(msg+e)
+	    },
+		show: function(event) {
+			event.cancelBubble = true;   //这种就阻止了事件冒泡
+			 console.log(event);   //event 这个就是事件对象了	
+		} 
+	  }
+	}
+
+	方法中传入$event即可，如
+
+	<button @click="submit('hello!', $event)">Submit</button>
+	
+	div id="box">
+        <input type="button" value="按钮" @click="show($event)"> 
+    </div>
+
+
+### vue 中class 相关用法
+
+           
+        <div
+            class="index-board-item"
+            v-for="(item, index) in boardList"
+            :class="[{'line-last' : index % 2 !== 0}, {'line-bottom' : index >= (boardList.length -2)}, 'index-board-' + item.id]"
+
+		</div>
+
+
+	或者router-link中
+
+		<div class="product-board">
+            <img :src="productIcon">
+            <ul>
+                <router-link v-for="(item, index) in products"
+                    :to="{ path: item.path }"
+                    tag="li" active-class="active"
+                    :key="index"
+                >
+                    {{item.name}}
+                </router-link>
+            </ul>
+        </div>
+
+	active-class="active" 表示点击到对应的li列表时，加入active这个类
+	如下面是类的样式：
+    .product-board li.active,
+    .product-board li:hover {
+        background: #4fc08d;
+        color: #fff;
+    }
+
 
 
 

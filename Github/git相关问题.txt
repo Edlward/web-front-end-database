@@ -1,0 +1,31 @@
+﻿1. modified: xxx(modified content, untracked content)
+
+大概意思是xxx目录没有被跟踪。那自然push上去的时候是空的了
+解决办法：后来发现这主要是xxx目录下有一个.git 目录，可能是被人给你这个目录的时候里面有了.git目录。删除.git目录。重新git add .就可
+
+
+2. github 中出现灰色文件夹，本地不能更新对应的文件夹
+	
+	解决方法：
+		git rm -r --cached some-directory
+		下面的步聚可能 不用
+		git commit -m "Remove the now ignored directory some-directory"
+		git push -u origin master
+		之后再提交对应失败的文件夹
+		git add .
+		git commit -m "xxxxx"
+		git push origin master
+
+
+3. git 删除已经提交的 .idea 目录
+	-从git中删除idea：
+		git rm —cached -r .idea
+
+	-将.gitignore文件加入git：
+		git add .gitignore
+
+	-Commit gitignore文件，将.idea从源代码仓库中删除：
+		git commit -m '(gitignore commit and remove .idea)'
+
+	-Push到服务器：
+		git push

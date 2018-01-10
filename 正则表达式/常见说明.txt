@@ -1,0 +1,126 @@
+
+\d	数字 			[0-9]
+\w	英文、数字、下划线	[a-z0-9_]
+\s	空白字符
+
+
+\D				[^0-9]
+\W				[^a-z0-9_]
+
+
+常用量词
+{n}		正好n次
+{n, m}		最少n次，最多m次
+{n,}		最少n次，最多不限制
+
+	[1-9]\d{7}--匹配电话号码
+	[1-9]\d{4,10} 匹配QQ号
+
+
+*		任意次/0次或者无数次 	{0,}
+？	零次或一次	{0,1}
++	一次或任意次{1,}
+{n}	正好n次
+
+^	表示行首
+$	表示行尾
+
+
+
+//	检测 邮箱格式 
+    let oTxt3 = document.getElementById("txt3");
+    let oBtn2 = document.getElementById("btn2");
+    oBtn2.onclick = function () {
+        let re = /\w+@[a-z0-9]+\.[a-z]+/i;
+        if (re.test(oTxt3.value)){
+            alert("邮箱格式正确");
+        }else {
+            alert("邮箱格式错误");
+        }
+    }
+
+test 规则： 只要 字符串一部分符合要求，就会返回 true
+	如：---是aawt@126.com	用上面的程序也检测合格
+
+
+加入 ^ $
+    let oTxt3 = document.getElementById("txt3");
+    let oBtn2 = document.getElementById("btn2");
+    oBtn2.onclick = function () {
+        let re = /^\w+@[a-z0-9]+\.[a-z]+$/i;
+        if (re.test(oTxt3.value)){
+            alert("邮箱格式正确");
+        }else {
+            alert("邮箱格式错误");
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+、d\
