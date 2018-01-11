@@ -437,7 +437,7 @@ Component装饰器包含多个属性，这些属性的值叫做元数据，Angul
 
 ### product?.price
 	
-	这种写法表示：只的当product有值的时候才会云访问，product.price这个值
+	这种写法表示：只当product有值的时候才会访问，product.price这个值
 
 ### import 'rxjs/add/observable/of';
 

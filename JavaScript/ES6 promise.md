@@ -322,7 +322,3 @@ Promise.resolve()方法可以将一般的对象转成Promise对象。
 
 
 
-
-
-
-
