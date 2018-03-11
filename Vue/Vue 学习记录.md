@@ -77,7 +77,73 @@
 		updated	组件更新完毕	*
 		beforeDestroy	组件销毁前
 		destroyed	组件销毁后
+		
+		===============================================
 
+		<!DOCTYPE html>
+		<html lang="zh-CN">
+		<head>
+			<meta charset="UTF-8">
+			<title>vue2.0 开始学习</title>
+		</head>
+		<body>
+			<div id="box">
+				<input type="button" value="会被更新的数据" @click="update">
+				<input type="button" value="会被销毁的组件" @click="destroy">
+				{{ msg }}
+			</div>
+		<script src="vue2.0.js"></script>
+		<script>
+			window.onload = function () {
+		
+			    new Vue({
+				    el: '#box',
+				    data: {
+				        msg: 'welcome to vue2.0'
+				    },
+				    methods: {
+				        update(){
+				        	// 更新组件内的数据
+				            this.msg = "更新页面数据"
+				        },
+					    destroy(){
+				            // 销毁组件
+				            this.$destroy();
+					    }
+				    },
+				    
+				    // 组件完全显示在页面的时候，会依次触发下面4个事件
+				    beforeCreate(){
+				        console.log('组件实例刚刚被创建');
+				    },
+				    created(){
+				        console.log('实例已经创建完成');
+				    },
+				    beforeMount(){
+				        console.log('模板编译之前');
+				    },
+				    mounted(){
+				        console.log('模板已经编译完成')
+				    },
+					// 更改组件的内容，会触发下面2个事件
+				    beforeUpdate(){
+				        console.log('组件更新之前');
+				    },
+					updated(){
+				        console.log('组件更新完成');
+					},
+					// 销毁组件会触发下面2个事件
+		            beforeDestroy(){
+						console.log('组件销毁之前')
+		            },
+				    destroyed(){
+		                console.log('组件销毁之后')
+				    }
+			    });
+		    };
+		</script>
+		</body>
+		</html>
 
 
 ### 组件间通信
@@ -175,6 +241,10 @@
 
 ### 路由和路由跳转
 
+- 安装
+	
+		npm install vue-router --save
+
 - 路由形式
 
 	    <router-link tag="div" class="tab-item" to="/recommend">
@@ -231,6 +301,8 @@
 
 ### Vuex 
 
+	先安装： npm install vuex --save
+
 	Vuex中接收外部参数的方法
 	// 可以异步操作
 	const actions = {
@@ -268,12 +340,24 @@
 			...mapMutations({
 		        'getProductOfId'
 		      }),
+				或者将大括号{}改为中括号[]，上面用大括号是用于重命名
+				...mapMutations([
+		        'getProductOfId'
+		      ]),
 
 			其他函数直接调用：
 			created() {
 				getProductOfId(11);
 			}
 		  },
+
+	这里需要注意的是:
+	
+	mutations 中的方法是不分组件的 , 假如你在 a.js 文件中的定义了
+	switch_dialog 方法 , 在其他文件中定义另一个 switch_dialog 方法 , 那么
+	$store.commit('switch_dialog') 会执行所有的 switch_dialog 方法。
+	mutations里的操作必须是同步的。
+
 
 ### You may have an infinite update loop in a component render function
 	

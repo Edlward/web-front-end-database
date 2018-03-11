@@ -4,6 +4,37 @@
 	npm config set registry https://registry.npm.taobao.org
 	npm config set disturl https://npm.taobao.org/dist
 
+## 安装cnpm
+
+	最终发现cnpm其实是这么用的
+	npm install -g cnpm --registry=http://r.cnpmjs.org
+	npm install microtime --registry=http://r.cnpmjs.org --disturl=http://dist.cnpmjs.org
+	
+## npm 相关命令
+
+	npm -v          #显示版本，检查npm 是否正确安装。
+	 
+	npm install express   #安装express模块
+	 
+	npm install -g express  #全局安装express模块
+	 
+	npm list         #列出已安装模块
+	 
+	npm show express     #显示模块详情
+	 
+	npm update        #升级当前目录下的项目的所有模块
+	 
+	npm update express    #升级当前目录下的项目的指定模块
+	 
+	npm update -g express  #升级全局安装的express模块
+	 
+	npm uninstall express  #删除指定的模块
+
+
+    安装有些插件时会显示提醒，在package.json内写入
+    "private": true
+    即可
+
 ## 清除已设置的npm淘宝镜像
 	
 	npm config delete registry
