@@ -4,6 +4,7 @@
 	npm i vue-cli -g
 	使用：
 		vue init webpack-simple my-project
+			进入my-project目录
 		npm install 
 		npm run dev
 
@@ -258,6 +259,8 @@
 
 		toOrderList () {
 		    this.$router.push({path: '/orderList'});
+			或者将当前路由替换成其他的路由，如：
+			this.$router.replace({path: '/otherList'});
 		}
 
 - 点击跳转
@@ -273,6 +276,27 @@
 		</ul>
 
 	active-class="active" 表示点击到对应的li列表时，加入active这个类似
+
+- 访问路由配置中的参数
+	
+		路由配置如下：
+		{
+	            path: '/user',
+		        component: User,
+		        children: [
+			        {path: ':username/age/:age', component: UserDetail}
+		        ],
+	    }
+		要访问username,age两个参数，可以通过： this.$route.params.xxxx来访问，如：
+
+		        getMessage () {
+					this.username = this.$route.params.username 
+                
+                	this.age =  this.$route.params.age
+                
+				}
+                
+
 
 ### 路由跳转回到页面顶部	
 
