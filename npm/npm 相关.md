@@ -35,6 +35,8 @@
     "private": true
     即可
 
+	npm i koa@1.6.0	 安装固定版本的koa
+
 ## 清除已设置的npm淘宝镜像
 	
 	npm config delete registry

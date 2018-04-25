@@ -57,10 +57,17 @@
 
 
 
+### js中的innerHTML，innerText，value的区别
 
+	innerHTML  是在控件中加html代码  就是设置一个元素里面的HTML
+	document.getElementById("demo").innerHTML="<h1>My First JavaScript</h1>"; 
 
+	innerText   在控件中添加文字，W3C没有标准化，尽量用innerHTML
+	document.getElementById("demo").innerText="<h2>My First JavaScript</h2>";  
+	h2标签不会被解析，会当作字符串显示。
 
-
+	value 是专门用作表单的，读取或者写入表单的数据
+	document.getElementById("input").value="测试数据";  
 
 
 

@@ -29,3 +29,22 @@
 
 	-Push到服务器：
 		git push
+
+
+4. https://github.com/zec/music-player.git -b vue --depth 1
+
+	-b vue -b表示分支，表示克隆  vue 分支
+	--depth 1 表示克隆最近的提交文件
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,7 +1,7 @@
 
 ## webpack用法：
 
-	1. 进入对应目录 npm init
+	1. 进入对应目录，输入： npm init
 	2. 	全局安装webpack: npm i webpack -g
 		安装webpack到目录下	cnpm install webpack --save-dev
 	

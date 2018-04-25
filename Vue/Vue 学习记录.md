@@ -39,13 +39,15 @@
             }，
 
 			example2:{
-　　　　　　　　　//注意：当观察的数据为对象或数组时，curVal和oldVal是相等的，因为这两个形参指向的是同一个数据对象
-　　　　　　　　　　handler(curVal,oldVal){
-　　　　　　　　　　　　conosle.log(curVal,oldVal)
-　　　　　　　　　　},
-　　　　　　　　　　deep:true
-			　　　}
+			　　　　　　　　　
+				//注意：当观察的数据为对象或数组时，curVal和oldVal是相等的，因为这两个形参指向的是同一个数据对象
+				handler(curVal,oldVal){
+					conosle.log(curVal,oldVal)
+				},
+				deep:true
+			}
 		}
+
 		这个是监听watchValue的变化，如果这个值变化了，就运行右边的函数，输出当前的值和变化之前的值，这个函数接收的两个参数是默认转递过来的。
 	
 
@@ -275,7 +277,7 @@
 			</router-link>
 		</ul>
 
-	active-class="active" 表示点击到对应的li列表时，加入active这个类似
+		active-class="active" 表示点击到对应的li列表时，加入active这个类似
 
 - 访问路由配置中的参数
 	
@@ -296,6 +298,22 @@
                 
 				}
                 
+- 路由重定向
+
+	    {
+            path: '/',
+            redirect: '/hello'  // 重定向到路由 hello
+            
+        },
+        {
+            path: '/hello',
+            component: HelloWorld
+        }
+
+- router-active-class 
+
+		点击跳转到对应的路由时，会加载这个类
+
 
 
 ### 路由跳转回到页面顶部	
@@ -305,22 +323,21 @@
 	export default new Router({
     mode: 'history',
     routes: [
-        {
-            path: '/',
-            name: 'HomePage',
-            component: HomePage
-        },
-        {
-            path: '/product/:id',
-            component: ProductDetail
-        }
-
-    ],
-    // 让路由跳转到顶部
-    scrollBehavior (to, from, savedPosition) {
-        return { x: 0, y: 0 }
-    }
-})
+	        {
+	            path: '/',
+	            name: 'HomePage',
+	            component: HomePage
+	        },
+	        {
+	            path: '/product/:id',
+	            component: ProductDetail
+	        }
+    	],
+	    // 让路由跳转到顶部
+	    scrollBehavior (to, from, savedPosition) {
+	        return { x: 0, y: 0 }
+	    }
+	})
 
 
 ### Vuex 
@@ -344,21 +361,27 @@
 	调用：
 		方法一：
 	created(){
-			// vuex 中传递参数方法
+			// vuex 中传递参数方法 调用actions中的方法
             this.$store.dispatch('getProductOfId',
 	            parseInt(this.$route.params.id));
+
+			// 调用mutations中的方法
+			this.$store.commit("setProductId", "12")
         },
 
 
 		方法二：
 
-		import {mapMutations} from 'vuex'
+		import {mapMutations, mapActions} from 'vuex'
 
 		  methods: {
 		
 		      ...mapMutations({
 		        setSinger: 'getProductOfId'
-		      })
+		      }),
+			  ...mapActions({
+					"setProductId"
+				})
 
 			或者不要别名： 
 			...mapMutations({
@@ -423,7 +446,7 @@
 
 - 用webpack模板的vue项目设置方法
 
-	这个网上有，可以参考，因为没用过webpack模板的vue进行跨域开发，所以没有配置过。
+		这个网上有，可以参考，因为没用过webpack模板的vue进行跨域开发，所以没有配置过。
 
 
 ### vue-lazyload vue中的图片懒加载插件
@@ -461,8 +484,9 @@
         <div
             class="index-board-item"
             v-for="(item, index) in boardList"
-            :class="[{'line-last' : index % 2 !== 0}, {'line-bottom' : index >= (boardList.length -2)}, 'index-board-' + item.id]"
-
+            :class="[{'line-last' : index % 2 !== 0}, 
+					{'line-bottom' : index >= (boardList.length -2)},
+					 'index-board-' + item.id]"
 		</div>
 
 
@@ -491,5 +515,22 @@
 
 
 
+### 模拟从后端取数据 
+
+- json-server
+
+		用于模拟从后端取数据，用json格式的数据进行模拟
+	
+		安装： npm install json-server --save
+	
+		对于webpack框架，修改dev-server.js文件
 
 
+- body-parser
+
+
+		安装： npm install body-parser --save
+	
+		对于webpack框架，修改dev-server.js文件 
+
+		04：Vue2.0 实战二 电商项目（2017年3月最新） 项目中有说明
