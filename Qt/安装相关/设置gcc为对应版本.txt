@@ -1,0 +1,19 @@
+    安装g++-6后，将其设置为默认。
+    # 首先要让系统知道我们安装了多个版本的g++
+    # 命令最后的 20和200是优先级，如果使用auto选择模式，系统将默认使用优先级高的
+    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.6 20
+    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 200
+
+    # 使用交互方式的命令选择默认使用的版本
+    sudo update-alternatives --config g++
+
+    # 查询系统中安装有哪些版本
+    sudo update-alternatives --query g++
+
+    gcc同理:
+
+    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 200
+
+    sudo update-alternatives --query gcc
+
+    sudo update-alternatives --config gcc

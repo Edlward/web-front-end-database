@@ -1,0 +1,233 @@
+视频04_Makefile编译
+烧写要在u-boot模式下，就是开机就按 确认 键
+在超级终端输入的命令：
+
+fdisk -c 0
+fatformat mmc 0:1
+ext3format mmc 0:2
+ext3format mmc 0:3
+ext3format mmc 0:4
+fastboot
+
+之后再用platform-tools 工具，进入到platform-tools目录中，执行下面的命令
+
+当然要连接USB-OTG那条线
+
+fastboot.exe flash bootloader u-boot-iTop-4412.bin
+fastboot.exe flash kernel zImage
+fastboot.exe flash ramdisk ramdisk-uboot.img
+fastboot.exe flash system system.img
+
+fastboot -w
+fastboot reboot
+
+
+
+## 在ubuntu上进行交叉编译程序到开发板上运行
+
+arm-none-linux-gnueabi-gcc hello.c -o hello -static 
+	-static 表示静态编译，就是将库文件打包到  hello里
+	
+	
+## 编译最小系统命令：
+
+make_ext4fs -s -l 314572800 -a root -L linux system.img system
+
+	最后的 system 是要编译的目录名
+
+	
+	
+    进程配置页面
+
+    进入内核目录，执行： make menuconfig
+        然后选择自己需要的配置选项。
+    
+    
+    编译内核命令：make zImage
+    
+        编译好的文件在 arch/arm/boot 目录下 名为 ：zImage
+    
+
+    新的linux内核 要编译过，才可以用
+
+	编译命令：
+		//make oldconfig&&make prepare&&make scripts
+
+ 
+ 
+    拿到内核文件要作的处理：不同的内核对应的文件系统是不一样的！！！
+    
+    拿到源码后一般需要设置一下编译器路径，在源码目录Makefile文件
+        中可以设置编译路径“CROSS_COMPILE”
+        前面编译环境搭建的时候，解压arm-2009q3的目录和这里对应
+        
+        文件中的内容：
+        export KBUILD_BUILDHOST := $(SUBARCH)
+        ARCH            ?= arm
+        # 这个要对应编译器的目录  arm-2009q3
+        CROSS_COMPILE   ?=/usr/local/arm/arm-2009q3/bin/arm-none-linux-gnueabi-
+        #CROSS_COMPILE   ?= /usr/local/arm/4.5.1/bin/arm-none-linux-gnueabi-
+        CROSS_COMPILE   ?= $(CONFIG_CROSS_COMPILE:"%"=%)
+
+
+    打开drivers/Makefile文件
+        –类似下面的写法，只要编译内核就必须编译这个文件
+        – obj-y += gpio/    这种写法，就是只要编译内核就必须编译 gpio 目录下的所有文件
+ 
+ 
+    1. 打开 drivers/char/Makefile     文件也有类似的
+ 
+    - 如果定义了宏CONFIG_LEDS_CTL则将itop4412_leds.c文件编译进内核
+    – obj-$(CONFIG_LEDS_CTL) += itop4412_leds.o
+
+
+ 
+    2. 在平台文件中注册设备: 注册到内核
+        vim arch/arm/mach-exynos/mach-itop4412.c
+        
+        在平台文件中注册设备：keyirq
+        添加：
+        struct platform_device s3c_device_keyirq_ctl = {
+            .name   = "keyirq",
+            .id     = -1,
+        };
+        &s3c_device_keyirq_ctl,   
+
+    3. 注册驱动名相关配置：
+    drivers/char/Kconfig
+    
+    增加如下内容：
+    config LEDS_CTL     
+            tristate "Enable LEDS config"
+            default y
+            help
+              Enable LEDS config
+   
+   
+   
+    make menuconfig 命令配置：
+    内核 当前目录下有个 .config 文件 里面有 编译进内核的项
+        内容，大概如下：
+            CONFIG_HELLO_CTL=y 这说明要将 这个项，编译进内核中
+    
+         CONFIG_HELLO_CTL=y
+         // 这个是不编译进内核的，通过 make menuconfig 进行配置
+         // 即可选择对应的编译进内核
+        # CONFIG_LEDS_CTL is not set
+        CONFIG_BUZZER_CTL=y
+        CONFIG_ADC_CTL=y
+ 
+ 
+    ls /sys/bus
+        可以查看系统的 总线
+ 
+ 
+    cat proc/devices    查看设备号
+ 
+ 
+    编译上层应用程序命令： 
+    arm-none-linux-gnueabi-gcc invoke_led.c -o invoke_led -static
+ 
+    android 中不能执行程序，解决方法：
+
+	重新加载该分区，命令： mount -o rw,remount /mnt/udisk1
+
+    insmod ./request_cdev_num.ko numdev_major=9 numdev_minor=0
+ 
+ 
+    加载模块“create_cnode.ko”
+    – 使用命令: ls /sys/class/ 可以查看到生成的class
+    – 使用命令: ls /dev 可以查看到生成的两个设备节点
+ 
+ 
+   
+    SPI:
+    
+     mach-exynos/mach-itop4412中：
+        spi2_board_info 在这个结构体中加入：
+    
+        定义相关：
+     #ifdef CONFIG_SPI_RC522
+            {
+                    .modalias = "rc522",
+                    .platform_data = NULL,
+                    .max_speed_hz = 10*1000*1000,
+                    .bus_num = 2,
+                    .chip_select = 0,
+                    .mode = SPI_MODE_0,
+                    .controller_data = &spi2_csi[0],
+            }
+    #endif
+ 
+ 
+    内核配置文件：
+        vim config_for_linux_scp_elite
+
+
+
+    将QT编译到4412：
+        进入对应的项目目录，这个目录是在ubuntu上的项目，已经编译过没有问题：
+            这个目录就是编写项目时的目录，不是生成可执行文件的目录。
+        输入命令：  /opt/qt-4.7.1/bin/qmake 
+        这时目录下会多一个Makefile文件
+        make    执行这个命令，就会生成对应的文件 
+        
+        
+        QT启动命令： 
+            /home/topeet/Qt5.8.0/Tools/QtCreator/bin/qtcreator
+        
+        出现：undefined symbol: g_type_ensure 错误
+            将 platformthemes 改名为其他即可，如 platformthemes_my
+        
+        
+    安装g++-6后，将其设置为默认。
+    # 首先要让系统知道我们安装了多个版本的g++
+    # 命令最后的 20和200是优先级，如果使用auto选择模式，系统将默认使用优先级高的
+    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.6 20
+    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 200
+
+    # 使用交互方式的命令选择默认使用的版本
+    sudo update-alternatives --config g++
+
+    # 查询系统中安装有哪些版本
+    sudo update-alternatives --query g++
+
+    gcc同理:
+
+    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 200
+
+    sudo update-alternatives --query gcc
+
+    sudo update-alternatives --config gcc
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+

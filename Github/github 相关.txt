@@ -64,7 +64,9 @@ http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b0
         $ git remote add origin git@github.com:xxx/yyy.git  
 //添加远程仓库路径（ssh路径或者http路径）
         $ git push -u origin master
-注：如何找路径：点击你刚创建的respiratory（仓库），在右下角会有这么一片区域，如下图所示，复制里面的内容就可以了。
+注：如何找路径：点击你刚创建的respiratory（仓库），在右下角会有一片区域，复制里面的内容就可以了。
+
+
 
 git remote add origin git@github.com:hxhaawt/Professional-JavaScript-for-Web-Developers.git
 git push -u origin master
@@ -145,8 +147,8 @@ git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Crese
 
 
 6.如果远程修改了一个文件同时本地也对这个文件作了修改，这时就要在本地用
-	git pull
-	把远程修改的文件down下来，然后对文件这个文件进行修改，再git add
+git pull
+把远程修改的文件down下来，然后对文件这个文件进行修改，再git add
 
 也可以只pull特定分支如 git pull origin dev
 
@@ -332,7 +334,6 @@ git reset --soft HEAD^
 Changes to be committed:
   (use "git reset HEAD <file>..." to unstage)
 
-
 modified:   1.html
 提示你有修改，可以commit的，那太明显了，这就是staging状态啊。
 
@@ -346,12 +347,7 @@ git reset --hard HEAD^
 撤销上二次的commit和all changes
 git reset --hard HEAD^^
 
-情景4：rebase
-git checkout mybranch
-git rebase master
-git checkout master
-git merge mybranch
-git fetch
+
 
 
 
